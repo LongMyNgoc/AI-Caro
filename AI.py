@@ -115,14 +115,23 @@ def take_action(state, action, player_id):
             reward = 0  
             done = True  
         else:  
-            reward = 0  
+            reward = 0.005
+            if has_connected_move(next_state, x, y, player_id):  
+                reward += 0.05  
             done = False  
     else:  
         # Should not reach here as agents avoid invalid moves  
-        reward = -1  
+        reward = -0.02  
         done = True  # End game on invalid move for safety  
 
     return next_state, reward, done
+
+def has_connected_move(state, x, y, player_id):  
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (1, 1), (-1, 1), (1, -1)]:  
+        nx, ny = x + dx, y + dy  
+        if 0 <= nx < Ox and 0 <= ny < Oy and state[nx, ny] == player_id:  
+            return True  
+    return False
 
 # Hàm kiểm tra người thắng
 def check_win(state, x, y):  
